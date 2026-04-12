@@ -14,5 +14,11 @@ class Message extends Model
     protected $fillable = [
         'sender_name',
         'content',
+        'page_id',
     ];
+
+    public function page()
+    {
+        return $this->belongsTo(Page::class);
+    }
 }
