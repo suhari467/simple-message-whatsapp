@@ -28,6 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Undangan Kita')
+            ->favicon(asset('assets/img/default-page.png'))
             ->colors([
                 'primary' => Color::Amber,
             ])

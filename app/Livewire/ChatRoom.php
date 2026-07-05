@@ -54,6 +54,6 @@ class Chatroom extends Component
     {
         return view('livewire.chatroom', [
             'messages' => $this->page->messages()->oldest()->get(),
-        ])->layout('components.layouts.app');
+        ])->layout('components.layouts.app', ['page' => $this->page]);
     }
 }
