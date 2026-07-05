@@ -9,6 +9,7 @@
 /.idea
 /.nova
 /.phpunit.cache
+/.agents
 /.cursor
 /.gemini
 /.vscode
