@@ -1,10 +1,10 @@
 <?php
 
-use App\Livewire\Chatroom;
+use App\Livewire\ChatRoom;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/admin');
 });
 
-Route::get('/{page:slug}', Chatroom::class);
+Route::get('/{page:slug}', ChatRoom::class);
