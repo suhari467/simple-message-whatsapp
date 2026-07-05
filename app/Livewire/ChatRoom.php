@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Page;
 use Livewire\Component;
 
-class Chatroom extends Component
+class ChatRoom extends Component
 {
     public Page $page;
 
