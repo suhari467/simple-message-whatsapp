@@ -61,7 +61,7 @@
              this.waveformBars = bars;
          }
      }" x-init="initAudio()"
-        class="mx-auto h-screen relative bg-[#ece5dd] dark:bg-[#0b141a] flex flex-col font-sans overflow-hidden">
+        class="mx-auto h-[100dvh] relative bg-[#ece5dd] dark:bg-[#0b141a] flex flex-col font-sans overflow-hidden">
 
         @if($page->background_music)
             <audio x-ref="bgAudio" src="{{ Storage::url($page->background_music) }}" @timeupdate="updateProgress()"
@@ -649,7 +649,7 @@
 
             <!-- CHAT INPUT -->
             <div class="bg-[#f0f0f0] dark:bg-[#1f2c34] p-3 border-t border-gray-300 dark:border-gray-850">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 sm:gap-2">
                     <!-- EMOJI BUTTON -->
                     <div class="relative shrink-0">
                         <button type="button" @click="openEmoji = !openEmoji"
@@ -668,7 +668,7 @@
                     </div>
 
                     <!-- NAME INPUT -->
-                    <div class="w-24 sm:w-36 shrink-0 relative">
+                    <div class="w-20 sm:w-36 shrink-0 relative">
                         <input type="text" wire:model="senderName" placeholder="Your Name"
                             class="w-full p-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#2a3942] text-gray-800 dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#075e54] dark:focus:ring-[#00a884]">
                         @error('senderName')

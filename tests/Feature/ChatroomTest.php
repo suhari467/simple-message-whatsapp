@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Page;
 use App\Models\User;
-use App\Livewire\Chatroom;
+use App\Livewire\ChatRoom;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -70,8 +70,8 @@ class ChatroomTest extends TestCase
         $response->assertSuccessful();
         $response->assertSee('Support Channel');
         $response->assertSee('Help center description.');
-        $response->assertSee('Join Chatroom');
-        $response->assertSeeLivewire(Chatroom::class);
+        $response->assertSee('Join Event');
+        $response->assertSeeLivewire(ChatRoom::class);
     }
 
     // ──────────────────────────────────────────────
@@ -85,10 +85,10 @@ class ChatroomTest extends TestCase
             'description' => 'General group discussion',
         ]);
 
-        Livewire::test(Chatroom::class, ['page' => $page])
+        Livewire::test(ChatRoom::class, ['page' => $page])
             // Awalnya belum join
             ->assertSet('hasJoined', false)
-            ->assertSee('Join Chatroom')
+            ->assertSee('Join Event')
             // Klik Join
             ->call('joinGroup')
             // Sesudah join, state berubah
@@ -106,8 +106,9 @@ class ChatroomTest extends TestCase
             'description' => 'Developer discussion',
         ]);
 
-        $component = Livewire::test(Chatroom::class, ['page' => $page])
+        $component = Livewire::test(ChatRoom::class, ['page' => $page])
             ->call('joinGroup')
+            ->set('senderName', 'Developer')
             ->set('content', '**Hello** world *italics* 🎉')
             ->call('sendMessage')
             ->assertHasNoErrors();
@@ -136,7 +137,7 @@ class ChatroomTest extends TestCase
             'content' => 'Extra content',
         ]);
 
-        Livewire::test(Chatroom::class, ['page' => $page])
+        Livewire::test(ChatRoom::class, ['page' => $page])
             ->call('joinGroup')
             // Awalnya page info tersembunyi
             ->assertSet('showPageInfo', false)
