@@ -3,22 +3,24 @@
 namespace App\Livewire;
 
 use App\Models\Page;
-use App\Models\Message;
 use Livewire\Component;
-use Illuminate\Support\Str;
 
 class Chatroom extends Component
 {
     public Page $page;
+
     public $content = '';
-    public $senderName = 'Guest';
+
+    public $senderName = '';
+
     public $hasJoined = false;
+
     public $showPageInfo = false;
 
     public function mount(Page $page)
     {
         $this->page = $page;
-        $this->senderName = 'User-' . rand(1000, 9999);
+        $this->page->load(['galleries', 'stories', 'donations']);
     }
 
     public function joinGroup()
@@ -28,12 +30,13 @@ class Chatroom extends Component
 
     public function togglePageInfo()
     {
-        $this->showPageInfo = !$this->showPageInfo;
+        $this->showPageInfo = ! $this->showPageInfo;
     }
 
     public function sendMessage()
     {
         $this->validate([
+            'senderName' => 'required|string|max:50',
             'content' => 'required|string',
         ]);
 
@@ -43,6 +46,8 @@ class Chatroom extends Component
         ]);
 
         $this->content = '';
+
+        $this->dispatch('scroll-to-bottom');
     }
 
     public function render()
