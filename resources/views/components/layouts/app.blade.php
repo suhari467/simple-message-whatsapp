@@ -12,7 +12,7 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="{{ $page->name }}">
         <meta property="og:description" content="{{ $page->description ?? 'Undangan Pernikahan Digital' }}">
-        <meta property="og:image" content="{{ $page->logo ? asset('storage/' . $page->logo) : asset('assets/img/default-page.png') }}">
+        <meta property="og:image" content="{{ $page->logo ? asset(Storage::url($page->logo)) : asset('assets/img/default-page.png') }}">
         <meta property="og:image:width" content="300">
         <meta property="og:image:height" content="300">
     @else

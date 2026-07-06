@@ -8,15 +8,79 @@
          waveformBars: [],
          activePhoto: null,
          galleryPhotos: [],
+         driverObj: null,
+         tutorialRefreshInterval: null,
          initAudio() {
             this.initWaveform();
-            if(this.joinPopup) { this.playAudio(); }
+            if(this.joinPopup) { 
+                this.playAudio(); 
+                this.startTutorial();
+            }
             $watch('joinPopup', value => {
                 if(value) { 
                     setTimeout(() => this.playAudio(), 500); 
                     setTimeout(() => this.updateWaveform(), 100);
+                    this.startTutorial();
                 }
             });
+         },
+         startTutorial() {
+             if (!localStorage.getItem('tutorialCompleted')) {
+                 setTimeout(() => {
+                     if (window.driver && window.driver.js) {
+                         const driver = window.driver.js.driver;
+                         
+                         const handleHeaderClick = (e) => {
+                             const headerInfo = document.getElementById('header-info');
+                             if (headerInfo) {
+                                 const rect = headerInfo.getBoundingClientRect();
+                                 if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                                     e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                                     if (this.driverObj) {
+                                         this.driverObj.destroy();
+                                     }
+                                     this.showInfo = true;
+                                 }
+                             }
+                         };
+                         document.addEventListener('click', handleHeaderClick, true);
+
+                         this.driverObj = driver({
+                             showProgress: false,
+                             allowClose: false,
+                             disableActiveInteraction: false,
+                             showButtons: ['next', 'close'],
+                             stagePadding: 0,
+                             steps: [
+                                 { 
+                                     element: '#header-info', 
+                                     popover: { 
+                                         title: 'Petunjuk', 
+                                         description: 'Informasi acara dapat menekan header diatas', 
+                                         side: 'bottom', 
+                                         align: 'start' 
+                                     } 
+                                 }
+                             ],
+                             onDestroyed: () => {
+                                 localStorage.setItem('tutorialCompleted', 'true');
+                                 this.driverObj = null;
+                                 document.removeEventListener('click', handleHeaderClick, true);
+                                 if (this.tutorialRefreshInterval) {
+                                     clearInterval(this.tutorialRefreshInterval);
+                                     this.tutorialRefreshInterval = null;
+                                 }
+                             }
+                         });
+                         this.driverObj.drive();
+                         this.tutorialRefreshInterval = setInterval(() => {
+                             if (this.driverObj) {
+                                 this.driverObj.refresh();
+                             }
+                         }, 500);
+                     }
+                 }, 800);
+             }
          },
          playAudio() {
              let audio = this.$refs.bgAudio;
@@ -109,10 +173,11 @@
         <div x-show="joinPopup" style="display: none;" class="flex flex-col h-full overflow-hidden">
 
             <!-- HEADER -->
-            <div class="bg-[#075e54] dark:bg-[#202c33] text-white px-4 py-3 flex items-center shadow-md cursor-pointer z-20"
-                wire:click="togglePageInfo">
+            <div id="header-info" class="bg-[#075e54] dark:bg-[#202c33] text-white px-4 py-3 flex items-center shadow-md cursor-pointer z-20"
+                wire:click="togglePageInfo"
+                @click="if (driverObj) { driverObj.destroy(); }">
                 @if($page->logo)
-                    <img src="{{ Storage::url($page->logo) }}" class="w-10 h-10 rounded-full mr-3 object-cover shadow-sm">
+                    <img src="{{ Storage::url($page->logo) }}" class="w-10 h-10 rounded-full mr-3 object-cover shadow-sm" loading="lazy">
                 @else
                     <div
                         class="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center font-bold mr-3 shadow-sm text-gray-600 dark:text-gray-300">
@@ -151,7 +216,7 @@
                     <div class="bg-white dark:bg-[#222e35] p-6 flex flex-col items-center text-center shadow-sm">
                         @if($page->logo)
                             <img src="{{ Storage::url($page->logo) }}" alt="Logo"
-                                class="w-32 h-32 rounded-full object-cover shadow-md mb-4 border-4 border-emerald-100 dark:border-emerald-900">
+                                class="w-32 h-32 rounded-full object-cover shadow-md mb-4 border-4 border-emerald-100 dark:border-emerald-900" loading="lazy">
                         @else
                             <div
                                 class="w-32 h-32 rounded-full bg-[#075e54] dark:bg-[#202c33] text-white flex items-center justify-center text-5xl font-bold shadow-md mb-4">
@@ -256,7 +321,7 @@
                             <div class="flex flex-col items-center text-center">
                                 @if($page->bride_image)
                                     <img src="{{ Storage::url($page->bride_image) }}"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50">
+                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50" loading="lazy">
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-pink-50 dark:border-pink-950">
@@ -287,7 +352,7 @@
                             <div class="flex flex-col items-center text-center">
                                 @if($page->groom_image)
                                     <img src="{{ Storage::url($page->groom_image) }}"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50">
+                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50" loading="lazy">
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-blue-50 dark:border-blue-950">
@@ -388,7 +453,7 @@
                                             <div
                                                 class="mt-2 w-32 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
                                                 <img src="{{ Storage::url($story->image_path) }}" alt="{{ $story->title }}"
-                                                    class="w-full h-auto object-cover">
+                                                    class="w-full h-auto object-cover" loading="lazy">
                                             </div>
                                         @endif
                                     </div>
@@ -415,7 +480,7 @@
                                                                                                 dark:border-gray-850 shadow-sm">
                                         <img src="{{ Storage::url($gallery->image_path) }}" alt="Prewedding"
                                             @click="activePhoto = {{ $index }}"
-                                            class="w-full h-full object-cover hover:scale-105 transition duration-200 cursor-pointer">
+                                            class="w-full h-full object-cover hover:scale-105 transition duration-200 cursor-pointer" loading="lazy">
                                     </div>
                                 @endforeach
                             </div>
@@ -700,26 +765,31 @@
     </div>
 
     @push('scripts')
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
+        <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
         <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1/index.js"></script>
         <script> document.addEventListener('livewire:initialized', () => {
                 const container = document.getElementById('chat-container');
-                let isNearBottom = true;
+                let isNearBottom = false;
 
                 if (container) {
-                    container.scrollTop = container.scrollHeight;
+                    if (localStorage.getItem('tutorialCompleted')) {
+                        container.scrollTop = container.scrollHeight;
+                        isNearBottom = true;
+                    }
                     container.addEventListener('scroll', () => {
                         isNearBottom = (container.scrollHeight - container.clientHeight - container.scrollTop) < 150;
                     });
                 }
 
                 Livewire.hook('morph.updated', ({ component, el }) => {
-                    if (container && isNearBottom) {
+                    if (localStorage.getItem('tutorialCompleted') && container && isNearBottom) {
                         container.scrollTop = container.scrollHeight;
                     }
                 });
 
                 window.addEventListener('scroll-to-bottom', () => {
-                    if (container) {
+                    if (localStorage.getItem('tutorialCompleted') && container) {
                         setTimeout(() => {
                             container.scrollTop = container.scrollHeight;
                             isNearBottom = true;
@@ -776,6 +846,17 @@
             /* Dark Mode scrollbar styling override */
             .dark .custom-scrollbar::-webkit-scrollbar-thumb {
                 background-color: rgba(255, 255, 255, 0.15);
+            }
+
+            .driver-popover-close-btn {
+                display: block !important;
+            }
+
+            /* Make sure the highlighted element is above the SVG overlay so it can be clicked */
+            .driver-active-element {
+                position: relative;
+                z-index: 1000001 !important;
+                pointer-events: auto !important;
             }
         </style>
     @endpush
