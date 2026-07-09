@@ -50,4 +50,9 @@ class Page extends Model
     {
         return $this->hasMany(PageDonation::class);
     }
+
+    public function recipients()
+    {
+        return $this->hasMany(Recipient::class);
+    }
 }

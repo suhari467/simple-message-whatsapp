@@ -66,6 +66,11 @@ class PagesTable
                     ->icon(Heroicon::OutlinedChatBubbleLeftEllipsis)
                     ->color('info')
                     ->url(fn ($record) => PageResource::getUrl('messages', ['record' => $record])),
+                Action::make('view_recipients')
+                    ->label('Penerima')
+                    ->icon(Heroicon::OutlinedUsers)
+                    ->color('gray')
+                    ->url(fn ($record) => PageResource::getUrl('recipients', ['record' => $record])),
                 EditAction::make(),
             ])
             ->toolbarActions([
