@@ -21,6 +21,10 @@ class ChatRoom extends Component
     {
         $this->page = $page;
         $this->page->load(['galleries', 'stories', 'donations']);
+
+        if (request()->has('to')) {
+            $this->senderName = request()->query('to');
+        }
     }
 
     public function joinGroup()
