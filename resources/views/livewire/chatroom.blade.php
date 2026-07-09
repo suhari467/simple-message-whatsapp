@@ -148,7 +148,7 @@
                 @endif
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ $page->name }}</h2>
                 @if($senderName)
-                    <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-2">Kepada Yth: {{ $senderName }}</p>
+                    <p class="text-base font-semibold text-emerald-600 dark:text-emerald-400 mb-2">Kepada Yth: {{ $senderName }}</p>
                 @endif
                 <p class="text-gray-500 dark:text-gray-400 mb-4 whitespace-pre-wrap text-sm line-clamp-3">{{ $page->description }}</p>
 
