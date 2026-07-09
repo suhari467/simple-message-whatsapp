@@ -129,15 +129,15 @@ class ManagePageRecipients extends ManageRelatedRecords
                     ->action(function (Recipient $record) {
                         $page = $record->page;
 
+                        $weddingDate = $page->wedding_date;
                         $akadTime = $page->akad_time;
                         $hariTanggal = '';
                         $jam = '';
                         try {
-                            $parsed = Carbon::parse($akadTime);
-                            $hariTanggal = $parsed->locale('id')->translatedFormat('l, d F Y');
-                            $jam = $parsed->format('H:i');
+                            $hariTanggal = Carbon::parse($weddingDate)->locale('id')->translatedFormat('l, d F Y');
+                            $jam = Carbon::parse($akadTime)->format('H:i');
                         } catch (\Exception $e) {
-                            $hariTanggal = $akadTime;
+                            $hariTanggal = $weddingDate;
                             $jam = $akadTime;
                         }
 
