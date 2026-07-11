@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Page extends Model
 {
     protected $fillable = [
+        'user_id',
         'name',
         'slug',
         'logo',
@@ -30,6 +32,37 @@ class Page extends Model
     protected $casts = [
         'wedding_date' => 'date',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function (Page $page) {
+            // Delete direct files
+            $filesToDelete = array_filter([
+                $page->logo,
+                $page->bride_image,
+                $page->groom_image,
+                $page->background_music,
+            ]);
+
+            foreach ($filesToDelete as $file) {
+                Storage::disk('public')->delete($file);
+            }
+
+            // Delete relations one by one to trigger their deleting events (deleting their files)
+            $page->galleries->each->delete();
+            $page->stories->each->delete();
+
+            // Delete other relations without files
+            $page->donations()->delete();
+            $page->messages()->delete();
+            $page->recipients()->delete();
+        });
+    }
 
     public function messages()
     {

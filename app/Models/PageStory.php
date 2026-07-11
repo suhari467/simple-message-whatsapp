@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class PageStory extends Model
 {
@@ -18,5 +19,14 @@ class PageStory extends Model
     public function page()
     {
         return $this->belongsTo(Page::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function (PageStory $story) {
+            if ($story->image_path) {
+                Storage::disk('public')->delete($story->image_path);
+            }
+        });
     }
 }
