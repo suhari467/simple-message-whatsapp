@@ -146,6 +146,9 @@
                         {{ substr($page->name, 0, 1) }}
                     </div>
                 @endif
+                @if($page->title_prefix)
+                    <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                @endif
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ $page->name }}</h2>
                 @if($senderName)
                     <p class="text-base font-semibold text-emerald-600 dark:text-emerald-400 mb-2">Kepada Yth: {{ $senderName }}</p>
@@ -187,8 +190,8 @@
                         {{ substr($page->name, 0, 1) }}
                     </div>
                 @endif
-                <div class="flex-1">
-                    <h1 class="font-bold text-lg leading-tight">{{ $page->name }}</h1>
+                <div class="flex-1 min-w-0">
+                    <h1 class="font-bold text-lg leading-tight truncate">{{ $page->title_prefix }} {{ $page->name }}</h1>
                     <p class="text-xs text-green-100 dark:text-emerald-400">Tap here for event info</p>
                 </div>
             </div>
@@ -226,12 +229,11 @@
                                 {{ substr($page->name, 0, 1) }}
                             </div>
                         @endif
+                        @if($page->title_prefix)
+                            <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                        @endif
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
-                            @if($page->bride_name && $page->groom_name)
-                                {{ $page->bride_name }} & {{ $page->groom_name }}
-                            @else
-                                {{ $page->name }}
-                            @endif
+                            {{ $page->name }}
                         </h3>
                         <p class="text-emerald-600 dark:text-emerald-400 font-semibold mt-1">Grup ·
                             {{ $page->messages()->count() }} Pesan
@@ -553,57 +555,114 @@
                         <div class="bg-white dark:bg-[#222e35] p-4 shadow-sm" x-data="{ copiedIndex: null }">
                             <h4
                                 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-4">
-                                Kirim Kado
+                                Kirim Kado / Donasi
                             </h4>
 
                             <div class="grid grid-cols-1 gap-4 max-w-sm mx-auto">
                                 @foreach($page->donations as $index => $donation)
                                     <div
                                         class="border border-gray-100 dark:border-gray-800/80 rounded-xl p-4 bg-[#f8f9fa] dark:bg-[#182229]/60 shadow-inner flex flex-col items-center text-center">
-                                        <!-- Bank Name -->
-                                        <span
-                                            class="text-xs font-extrabold px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 rounded-full mb-2 uppercase tracking-wide">
-                                            {{ $donation->bank_name }}
-                                        </span>
-
-                                        <!-- Account Name -->
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
-                                            {{ $donation->account_name }}
-                                        </p>
-
-                                        <!-- Account Number -->
-                                        <p
-                                            class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1 select-all tracking-wider font-bold">
-                                            {{ $donation->account_number }}
-                                        </p>
-
-                                        <!-- Copy Button -->
-                                        <button
-                                            @click="navigator.clipboard.writeText('{{ $donation->account_number }}'); copiedIndex = {{ $index }}; setTimeout(() => copiedIndex = null, 2000)"
-                                            class="mt-3 w-full flex items-center justify-center gap-1.5 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 text-white dark:text-emerald-400 text-xs font-bold rounded-lg transition-all focus:outline-none shadow-sm dark:shadow-none">
-                                            <!-- Copy / Success Icon -->
-                                            <template x-if="copiedIndex !== {{ $index }}">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
-                                                </svg>
-                                            </template>
-                                            <template x-if="copiedIndex === {{ $index }}">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M4.5 12.75l6 6 9-13.5" />
-                                                </svg>
-                                            </template>
+                                        @if($donation->isDirect())
+                                            <!-- Gift Type Badge (Datang Langsung / Kado Fisik) -->
                                             <span
-                                                x-text="copiedIndex === {{ $index }} ? 'Nomor Tersalin!' : 'Salin Nomor'"></span>
-                                        </button>
+                                                class="text-xs font-extrabold px-3 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 rounded-full mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                Kirim Kado
+                                            </span>
+
+                                            <!-- Recipient Name -->
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                                                {{ $donation->account_name }}
+                                            </p>
+
+                                            <!-- Address -->
+                                            @if($donation->address)
+                                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{{ $donation->address }}</p>
+
+                                                <!-- Copy Address Button -->
+                                                <button
+                                                    @click="navigator.clipboard.writeText({{ json_encode($donation->address) }}); copiedIndex = {{ $index }}; setTimeout(() => copiedIndex = null, 2000)"
+                                                    class="mt-3 w-full flex items-center justify-center gap-1.5 py-1.5 px-4 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-white dark:text-amber-400 text-xs font-bold rounded-lg transition-all focus:outline-none shadow-sm dark:shadow-none">
+                                                    <template x-if="copiedIndex !== {{ $index }}">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                        </svg>
+                                                    </template>
+                                                    <template x-if="copiedIndex === {{ $index }}">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M4.5 12.75l6 6 9-13.5" />
+                                                        </svg>
+                                                    </template>
+                                                    <span
+                                                        x-text="copiedIndex === {{ $index }} ? 'Alamat Tersalin!' : 'Salin Alamat'"></span>
+                                                </button>
+                                            @endif
+                                        @else
+                                            <!-- Bank Name -->
+                                            <span
+                                                class="text-xs font-extrabold px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 rounded-full mb-2 uppercase tracking-wide">
+                                                {{ $donation->bank_name }}
+                                            </span>
+
+                                            <!-- Account Name -->
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                                                {{ $donation->account_name }}
+                                            </p>
+
+                                            <!-- Account Number -->
+                                            <p
+                                                class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1 select-all tracking-wider font-bold">
+                                                {{ $donation->account_number }}
+                                            </p>
+
+                                            <!-- Copy Button -->
+                                            <button
+                                                @click="navigator.clipboard.writeText('{{ $donation->account_number }}'); copiedIndex = {{ $index }}; setTimeout(() => copiedIndex = null, 2000)"
+                                                class="mt-3 w-full flex items-center justify-center gap-1.5 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 text-white dark:text-emerald-400 text-xs font-bold rounded-lg transition-all focus:outline-none shadow-sm dark:shadow-none">
+                                                <!-- Copy / Success Icon -->
+                                                <template x-if="copiedIndex !== {{ $index }}">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </template>
+                                                <template x-if="copiedIndex === {{ $index }}">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                </template>
+                                                <span
+                                                    x-text="copiedIndex === {{ $index }} ? 'Nomor Tersalin!' : 'Salin Nomor'"></span>
+                                            </button>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
                         </div>
                     @endif
+
+                    <!-- Footer Info / Author -->
+                    <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+                        <p>
+                            Copyright &copy; {{ date('Y') }} Retech ID. <a href="{{ url('/') }}" class="hover:underline font-medium text-gray-600 dark:text-gray-300">{{ config('app.name') }}</a> - Created by
+                            <a href="https://instagram.com/suhari378" target="_blank" rel="noopener noreferrer"
+                                class="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                                Suhari
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
 

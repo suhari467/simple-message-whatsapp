@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Livewire\ChatRoom;
 use App\Models\Page;
 use App\Models\User;
-use App\Livewire\ChatRoom;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class ChatroomTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     // ──────────────────────────────────────────────
     // 1. Otorisasi Admin → UserResource (boleh)
@@ -147,5 +147,62 @@ class ChatroomTest extends TestCase
             // Klik header kedua kali → hilang
             ->call('togglePageInfo')
             ->assertSet('showPageInfo', false);
+    }
+
+    // ──────────────────────────────────────────────
+    // 8. Tampilkan Title Prefix & Footer Author
+    // ──────────────────────────────────────────────
+    public function test_halaman_menampilkan_title_prefix_dan_footer_author(): void
+    {
+        $uniqueSlug = 'event-'.uniqid();
+        $page = Page::create([
+            'title_prefix' => 'The Wedding Of',
+            'name' => 'Romeo & Juliet',
+            'slug' => $uniqueSlug,
+            'description' => 'Wedding celebration',
+        ]);
+
+        Livewire::test(ChatRoom::class, ['page' => $page])
+            ->assertSee('The Wedding Of')
+            ->assertSee('Romeo & Juliet')
+            ->assertSee('Copyright')
+            ->assertSee('Retech ID')
+            ->assertSee(config('app.name'))
+            ->assertSee('Created by')
+            ->assertSee('https://instagram.com/suhari378');
+    }
+
+    // ──────────────────────────────────────────────
+    // 9. Tampilkan Tipe Hadiah: Transfer & Datang Langsung
+    // ──────────────────────────────────────────────
+    public function test_halaman_menampilkan_tipe_hadiah_transfer_dan_datang_langsung(): void
+    {
+        $uniqueSlug = 'gift-event-'.uniqid();
+        $page = Page::create([
+            'name' => 'Gift Event Room',
+            'slug' => $uniqueSlug,
+            'description' => 'Event with gifts',
+        ]);
+
+        $page->donations()->create([
+            'gift_type' => 'transfer',
+            'bank_name' => 'BCA',
+            'account_name' => 'Suhari Developer',
+            'account_number' => '1234567890',
+        ]);
+
+        $page->donations()->create([
+            'gift_type' => 'datang_langsung',
+            'account_name' => 'Suhari Kediaman',
+            'address' => 'Jl. Merdeka No. 45, Jakarta Pusat',
+        ]);
+
+        Livewire::test(ChatRoom::class, ['page' => $page])
+            ->assertSee('Kirim Kado / Donasi')
+            ->assertSee('BCA')
+            ->assertSee('1234567890')
+            ->assertSee('Kirim Kado')
+            ->assertSee('Suhari Kediaman')
+            ->assertSee('Jl. Merdeka No. 45, Jakarta Pusat');
     }
 }
