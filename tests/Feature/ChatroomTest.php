@@ -166,7 +166,9 @@ class ChatroomTest extends TestCase
             ->assertSee('The Wedding Of')
             ->assertSee('Romeo & Juliet')
             ->assertSee('Copyright')
-            ->assertSee('Retech ID - Created by')
+            ->assertSee('Retech ID')
+            ->assertSee(config('app.name'))
+            ->assertSee('Created by')
             ->assertSee('https://instagram.com/suhari378');
     }
 
@@ -199,7 +201,7 @@ class ChatroomTest extends TestCase
             ->assertSee('Kirim Kado / Donasi')
             ->assertSee('BCA')
             ->assertSee('1234567890')
-            ->assertSee('Kado Fisik / Datang Langsung')
+            ->assertSee('Kirim Kado')
             ->assertSee('Suhari Kediaman')
             ->assertSee('Jl. Merdeka No. 45, Jakarta Pusat');
     }

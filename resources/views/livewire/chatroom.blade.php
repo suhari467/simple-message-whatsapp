@@ -147,7 +147,7 @@
                     </div>
                 @endif
                 @if($page->title_prefix)
-                    <p class="text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                    <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
                 @endif
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ $page->name }}</h2>
                 @if($senderName)
@@ -191,10 +191,7 @@
                     </div>
                 @endif
                 <div class="flex-1 min-w-0">
-                    @if($page->title_prefix)
-                        <p class="text-[11px] uppercase tracking-wider text-green-200 dark:text-emerald-400 font-semibold leading-tight truncate">{{ $page->title_prefix }}</p>
-                    @endif
-                    <h1 class="font-bold text-lg leading-tight truncate">{{ $page->name }}</h1>
+                    <h1 class="font-bold text-lg leading-tight truncate">{{ $page->title_prefix }} {{ $page->name }}</h1>
                     <p class="text-xs text-green-100 dark:text-emerald-400">Tap here for event info</p>
                 </div>
             </div>
@@ -233,14 +230,10 @@
                             </div>
                         @endif
                         @if($page->title_prefix)
-                            <p class="text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                            <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
                         @endif
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
-                            @if($page->bride_name && $page->groom_name)
-                                {{ $page->bride_name }} & {{ $page->groom_name }}
-                            @else
-                                {{ $page->name }}
-                            @endif
+                            {{ $page->name }}
                         </h3>
                         <p class="text-emerald-600 dark:text-emerald-400 font-semibold mt-1">Grup ·
                             {{ $page->messages()->count() }} Pesan
@@ -579,7 +572,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 </svg>
-                                                Kado Fisik / Datang Langsung
+                                                Kirim Kado
                                             </span>
 
                                             <!-- Recipient Name -->
@@ -589,9 +582,7 @@
 
                                             <!-- Address -->
                                             @if($donation->address)
-                                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">
-                                                    {{ $donation->address }}
-                                                </p>
+                                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{{ $donation->address }}</p>
 
                                                 <!-- Copy Address Button -->
                                                 <button
@@ -665,7 +656,7 @@
                     <!-- Footer Info / Author -->
                     <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
                         <p>
-                            Copyright &copy; {{ date('Y') }} Retech ID - Created by
+                            Copyright &copy; {{ date('Y') }} Retech ID - {{ config('app.name') }} - Created by
                             <a href="https://instagram.com/suhari378" target="_blank" rel="noopener noreferrer"
                                 class="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
                                 Suhari
