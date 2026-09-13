@@ -6,9 +6,11 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
@@ -21,6 +23,10 @@ class PageForm
             ->components([
                 Section::make('Informasi Dasar Grup')
                     ->schema([
+                        TextInput::make('title_prefix')
+                            ->label('Teks Awalan / Prefix Judul')
+                            ->placeholder('Contoh: The Wedding Of, Tasyakuran Khitan')
+                            ->columnSpanFull(),
                         TextInput::make('name')
                             ->label('Nama Grup (Mempelai)')
                             ->required()
@@ -146,20 +152,39 @@ class PageForm
                     ->schema([
                         Repeater::make('donations')
                             ->relationship('donations')
-                            ->label('Daftar Rekening / E-Wallet Donasi')
+                            ->label('Daftar Rekening / Kado Donasi')
                             ->schema([
+                                Select::make('gift_type')
+                                    ->label('Tipe Hadiah')
+                                    ->options([
+                                        'transfer' => 'Transfer Bank / E-Wallet',
+                                        'datang_langsung' => 'Datang Langsung / Kado Fisik',
+                                    ])
+                                    ->default('transfer')
+                                    ->required()
+                                    ->live()
+                                    ->columnSpanFull(),
                                 TextInput::make('bank_name')
                                     ->label('Nama Bank / E-Wallet')
-                                    ->placeholder('Contoh: Bank BCA, Mandiri, Gope, OVO')
-                                    ->required(),
-                                TextInput::make('account_name')
-                                    ->label('Atas Nama')
-                                    ->placeholder('Contoh: Zuhriyani Salma')
-                                    ->required(),
+                                    ->placeholder('Contoh: Bank BCA, Mandiri, Gopay, OVO')
+                                    ->required(fn (Get $get): bool => $get('gift_type') !== 'datang_langsung')
+                                    ->visible(fn (Get $get): bool => $get('gift_type') !== 'datang_langsung'),
                                 TextInput::make('account_number')
                                     ->label('Nomor Rekening / Nomor E-Wallet')
                                     ->placeholder('Contoh: 1234567890')
-                                    ->required(),
+                                    ->required(fn (Get $get): bool => $get('gift_type') !== 'datang_langsung')
+                                    ->visible(fn (Get $get): bool => $get('gift_type') !== 'datang_langsung'),
+                                TextInput::make('account_name')
+                                    ->label(fn (Get $get): string => $get('gift_type') === 'datang_langsung' ? 'Nama Penerima Kado' : 'Atas Nama Rekening')
+                                    ->placeholder('Contoh: Zuhriyani Salma')
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Textarea::make('address')
+                                    ->label('Alamat Lengkap Penerima (Pengiriman Kado)')
+                                    ->placeholder('Contoh: Jl. Mawar No. 12, RT 01/RW 02, Kel. Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415')
+                                    ->required(fn (Get $get): bool => $get('gift_type') === 'datang_langsung')
+                                    ->visible(fn (Get $get): bool => $get('gift_type') === 'datang_langsung')
+                                    ->columnSpanFull(),
                             ])
                             ->grid(2)
                             ->columnSpanFull(),

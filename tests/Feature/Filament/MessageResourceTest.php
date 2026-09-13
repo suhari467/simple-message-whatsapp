@@ -6,13 +6,13 @@ use App\Filament\Resources\Pages\Pages\ManagePageMessages;
 use App\Models\Message;
 use App\Models\Page;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class MessageResourceTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_admin_can_view_messages_on_dedicated_page(): void
     {
