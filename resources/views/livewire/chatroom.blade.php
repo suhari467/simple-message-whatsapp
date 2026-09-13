@@ -656,7 +656,7 @@
                     <!-- Footer Info / Author -->
                     <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
                         <p>
-                            Copyright &copy; {{ date('Y') }} Retech ID - {{ config('app.name') }} - Created by
+                            Copyright &copy; {{ date('Y') }} Retech ID. <a href="{{ url('/') }}" class="hover:underline font-medium text-gray-600 dark:text-gray-300">{{ config('app.name') }}</a> - Created by
                             <a href="https://instagram.com/suhari378" target="_blank" rel="noopener noreferrer"
                                 class="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
                                 Suhari
