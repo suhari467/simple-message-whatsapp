@@ -1,58 +1,248 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simple Message WhatsApp - Digital Wedding Invitation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi undangan pernikahan digital berbasis web interaktif dengan desain tema dan pengalaman pengguna (UI/UX) yang menyerupai WhatsApp Web / Chat Room modern. Aplikasi ini dirancang untuk memberikan pengalaman yang personal, interaktif, dan mudah digunakan bagi tamu undangan serta calon pengantin.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Daftar Isi
+- [Fitur Utama](#fitur-utama)
+- [Tech Stack & Persyaratan Sistem](#tech-stack--persyaratan-sistem)
+- [Panduan Instalasi & Local Development](#panduan-instalasi--local-development)
+- [Panduan Menjalankan Aplikasi](#panduan-menjalankan-aplikasi)
+- [Struktur Direktori Project](#struktur-direktori-project)
+- [Manajemen Hak Akses (Role, Rule & Gate)](#manajemen-hak-akses-role-rule--gate)
+- [Standar Kode & Pengujian](#standar-kode--pengujian)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Fitur Utama
 
-## Learning Laravel
+### 1. Pengalaman Tamu Undangan (Public Room)
+- **Tampilan Chat WhatsApp Web**: Suasana percakapan grup interaktif lengkap dengan header profil, nama tamu dinamis (`?to=NamaTamu`), status online, dan pesan sambutan.
+- **Pesan Multimedia**: Simulasi pesan teks penyambut, pesan suara (*voice note*), video ucapan, serta pesan interaktif lainnya.
+- **Drawer Profil Pengantin (Info Grup)**:
+  - **Detail Mempelai & Acara**: Informasi lengkap kedua mempelai (orang tua, foto), jadwal akad nikah, resepsi, serta integrasi tautan Google Maps.
+  - **Perjalanan Cinta (Love Story Timeline)**: Rangkaian cerita perjalanan cinta dengan tampilan visual 2 kolom (teks cerita di kiri, foto momen di kanan) yang responsif dan konsisten baik di desktop maupun mobile.
+  - **Galeri Foto Prewedding**: Grid galeri media foto dengan preview lightbox interaktif.
+  - **Hadiah Digital / Donasi**: Pilihan transfer bank/e-wallet (dengan fitur salin nomor rekening instan) dan alamat pengiriman kado fisik.
+- **Buku Tamu & RSVP Interaktif**: Tamu dapat mengirim ucapan selamat, doa restu, serta konfirmasi kehadiran secara langsung dari antarmuka obrolan.
+- **Musik Latar (Background Music)**: Pemutar lagu MP3 latar belakang dengan kontrol putar/jeda mengambang (*floating button*).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Panel Administrasi (Filament v4 Admin Panel)
+- **Multi-Step Form Wizard**: Formulir pembuatan undangan (*Page*) bertahap 4 langkah (Informasi Dasar, Detail Mempelai & Acara, Media & Timeline, Hadiah Digital) yang intuitif.
+- **Manajemen Undangan (Page)**: Kustomisasi slug, prefix judul, musik latar, galeri, timeline, dan rekening donasi.
+- **Manajemen Pesan & Ucapan**: Pemantauan pesan masuk dan RSVP dari para tamu.
+- **Manajemen Pengguna**: Khusus untuk pengguna dengan peran Admin.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Tech Stack & Persyaratan Sistem
 
-## Agentic Development
+### Kebutuhan Sistem (System Requirements)
+- **PHP**: `^8.3`
+- **Composer**: `v2+`
+- **Node.js**: `v18+` & **NPM**: `v9+`
+- **Database**: SQLite (default) atau MySQL `^8.0` / MariaDB `^10.4`
+- **Web Server**: Apache / Nginx / PHP Built-in Server
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Teknologi Utama
+- **Backend Framework**: [Laravel 13](https://laravel.com)
+- **Admin Panel**: [Filament v4](https://filamentphp.com)
+- **Frontend Reactive Component**: [Livewire 3](https://livewire.laravel.com) & [Livewire Volt](https://livewire.laravel.com/docs/volt)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **Interactivity**: [Alpine.js](https://alpinejs.dev)
+- **Code Formatter & Testing**: [Laravel Pint](https://laravel.com/docs/pint) & [PHPUnit 12](https://phpunit.de)
+
+---
+
+## Panduan Instalasi & Local Development
+
+Ikuti langkah-langkah berikut untuk memasang project di lingkungan lokal:
+
+1. **Clone Repository**:
+   ```bash
+   git clone https://github.com/suhari467/simple-message-whatsapp.git
+   cd simple-message-whatsapp
+   ```
+
+2. **Pasang Dependensi PHP (Composer)**:
+   ```bash
+   composer install
+   ```
+
+3. **Konfigurasi Environment**:
+   Salin file `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Sesuaikan konfigurasi database di file `.env`. Secara default, aplikasi siap menggunakan SQLite:
+   ```env
+   DB_CONNECTION=sqlite
+   ```
+
+4. **Generate Application Key**:
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Jalankan Database Migration & Seeder**:
+   ```bash
+   php artisan migrate --seed
+   ```
+
+6. **Buat Symlink Storage Publik**:
+   ```bash
+   php artisan storage:link
+   ```
+
+7. **Pasang Dependensi Frontend (NPM) & Build Asset**:
+   ```bash
+   npm install
+   npm run build
+   ```
+
+---
+
+## Panduan Menjalankan Aplikasi
+
+Anda dapat menjalankan seluruh layanan development secara bersamaan menggunakan perintah bawaan:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer run dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Perintah di atas akan mengeksekusi secara otomatis:
+- `php artisan serve` (Web server pada `http://127.0.0.1:8000`)
+- `php artisan queue:listen` (Pemroses antrean latar belakang)
+- `php artisan pail` (Real-time application log viewer)
+- `npm run dev` (Vite dev server dengan Hot Module Replacement)
 
-## Contributing
+### Akses Halaman
+- **Admin Panel**: Kunjungi [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+- **Halaman Undangan Tamu**: Kunjungi [http://127.0.0.1:8000/{slug}?to=NamaTamu](http://127.0.0.1:8000/{slug}?to=NamaTamu) (contoh: `http://127.0.0.1:8000/zuhriyani-bima?to=Budi+Santoso`)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Struktur Direktori Project
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Berikut adalah gambaran direktori penting pada project ini:
 
-## Security Vulnerabilities
+```
+simple-message-whatsapp/
+├── app/
+│   ├── Filament/                  # Konfigurasi Admin Panel Filament v4
+│   │   ├── Resources/
+│   │   │   ├── Messages/          # Resource manajemen pesan/ucapan
+│   │   │   ├── Pages/             # Resource manajemen undangan (Page)
+│   │   │   │   ├── Pages/         # ListPages, CreatePage (Wizard), EditPage
+│   │   │   │   ├── Schemas/       # PageForm.php (Skema modular form & wizard)
+│   │   │   │   └── Tables/        # Konfigurasi tabel halaman
+│   │   │   └── Users/             # Resource manajemen user (Khusus Admin)
+│   │   └── Widgets/               # Dashboard widget (Countdown, ringkasan data)
+│   ├── Livewire/                  # Komponen Livewire interaktif
+│   │   └── ChatRoom.php           # Logika utama tampilan room chat undangan
+│   ├── Models/                    # Eloquent Models
+│   │   ├── User.php               # Model pengguna & otentikasi Filament
+│   │   ├── Page.php               # Model undangan pernikahan
+│   │   ├── Story.php              # Model timeline kisah cinta
+│   │   ├── Gallery.php            # Model galeri foto prewedding
+│   │   ├── Donation.php           # Model rekening donasi / alamat kado
+│   │   └── Message.php            # Model pesan & konfirmasi RSVP tamu
+│   └── Providers/
+│       ├── AppServiceProvider.php
+│       └── Filament/AdminPanelProvider.php
+├── database/
+│   ├── factories/                 # Model factories untuk testing
+│   ├── migrations/                # Database migrations
+│   └── seeders/                   # Seeder data awal
+├── resources/
+│   ├── views/
+│   │   ├── livewire/
+│   │   │   └── chatroom.blade.php # Template antarmuka chat WhatsApp undangan
+│   │   └── components/            # Blade reusable components
+│   └── css/                       # Entry CSS (Tailwind)
+├── routes/
+│   └── web.php                    # Definisi rute web
+└── tests/
+    ├── Feature/                   # Feature tests PHPUnit
+    └── Unit/                      # Unit tests PHPUnit
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Manajemen Hak Akses (Role, Rule & Gate)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Aplikasi menerapkan sistem pembatasan akses (*access control*) berbasis Role untuk menjaga keamanan data:
+
+| Peran (*Role*) | Akses Filament Panel | Manajemen User (`UserResource`) | Akses Data Undangan (`Page`) |
+| :--- | :---: | :---: | :--- |
+| **Admin (`admin`)** | Ya | Ya (Penuh) | Dapat melihat, mengedit, dan mengelola seluruh undangan milik semua pengguna. |
+| **User (`user`)** | Ya | Tidak (Ditolak) | Terisolasi (*tenant-like*): Hanya dapat melihat & mengelola undangan miliknya sendiri. |
+| **Guest (Tamu)** | Tidak | Tidak | Hanya dapat mengakses URL publik undangan (`/{slug}`). |
+
+### Implementasi Rule & Gate di Kode
+
+1. **Akses Panel Filament (`canAccessPanel`)**:
+   Didefinisikan pada model `App\Models\User`:
+   ```php
+   public function canAccessPanel(Panel $panel): bool
+   {
+       return true; // Pengguna terdaftar (admin & user) berhak login ke panel
+   }
+   ```
+
+2. **Proteksi Resource Pengguna (`UserResource::canAccess`)**:
+   Halaman kelola akun pengguna dibatasi khusus untuk admin:
+   ```php
+   public static function canAccess(): bool
+   {
+       return auth()->user()->role === 'admin';
+   }
+   ```
+   Pengguna dengan peran `user` tidak akan melihat menu ini di navigasi dan akan mendapatkan respons *forbidden* jika mencoba mengakses URL secara langsung.
+
+3. **Isolasi Data Undangan Berdasarkan Kepemilikan (`PageResource::getEloquentQuery`)**:
+   Data undangan yang ditampilkan di tabel difilter secara otomatis:
+   ```php
+   public static function getEloquentQuery(): Builder
+   {
+       $query = parent::getEloquentQuery();
+
+       if (auth()->user()->role !== 'admin') {
+           $query->where('user_id', auth()->id());
+       }
+
+       return $query;
+   }
+   ```
+
+4. **Binding Otomatis Pembuat Undangan (`CreatePage::mutateFormDataBeforeCreate`)**:
+   Saat pengguna membuat undangan baru, kolom `user_id` secara otomatis diisi dengan ID user yang sedang login untuk mencegah manipulasi data antar pengguna:
+   ```php
+   protected function mutateFormDataBeforeCreate(array $data): array
+   {
+       $data['user_id'] = auth()->id();
+       return $data;
+   }
+   ```
+
+---
+
+## Standar Kode & Pengujian
+
+### Menjalankan Unit & Feature Test
+Aplikasi menggunakan **PHPUnit 12**. Untuk menjalankan seluruh suite pengujian:
+```bash
+php artisan test --compact
+```
+
+### Format Standar Kode (Laravel Pint)
+Setiap perubahan kode PHP wajib mengikuti standar PSR-12 menggunakan Laravel Pint:
+```bash
+vendor/bin/pint --dirty --format agent
+```
+
+---
+
+## Lisensi
+Aplikasi ini dilisensikan di bawah [MIT License](LICENSE).
