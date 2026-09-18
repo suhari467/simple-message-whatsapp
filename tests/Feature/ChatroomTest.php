@@ -205,4 +205,56 @@ class ChatroomTest extends TestCase
             ->assertSee('Suhari Kediaman')
             ->assertSee('Jl. Merdeka No. 45, Jakarta Pusat');
     }
+
+    // ──────────────────────────────────────────────
+    // 10. Tampilkan Love Story Timeline dengan Gambar Berdampingan
+    // ──────────────────────────────────────────────
+    public function test_halaman_menampilkan_love_story_timeline_dengan_gambar_berdampingan(): void
+    {
+        $uniqueSlug = 'timeline-event-'.uniqid();
+        $page = Page::create([
+            'name' => 'Timeline Room',
+            'slug' => $uniqueSlug,
+            'description' => 'Event with love story',
+        ]);
+
+        $page->stories()->create([
+            'title' => 'Pertama Berjumpa',
+            'date_or_year' => 'Tahun 2021',
+            'description' => 'Momen pertama kali bertatap mata di kampus.',
+            'image_path' => 'stories/test-story.jpg',
+            'sort_order' => 1,
+        ]);
+
+        Livewire::test(ChatRoom::class, ['page' => $page])
+            ->assertSee('Perjalanan Cinta Kami')
+            ->assertSee('Pertama Berjumpa')
+            ->assertSee('Tahun 2021')
+            ->assertSee('Momen pertama kali bertatap mata di kampus.')
+            ->assertSeeHtml('stories/test-story.jpg');
+    }
+
+    // ──────────────────────────────────────────────
+    // 11. Tampilkan Foto Mempelai dengan Fitur Pop-out (Lightbox)
+    // ──────────────────────────────────────────────
+    public function test_halaman_menampilkan_foto_mempelai_dengan_fitur_popout(): void
+    {
+        $uniqueSlug = 'couple-event-'.uniqid();
+        $page = Page::create([
+            'name' => 'Couple Room',
+            'slug' => $uniqueSlug,
+            'description' => 'Event with couple photos',
+            'bride_name' => 'Siti Nurhaliza',
+            'bride_image' => 'brides/bride.jpg',
+            'groom_name' => 'Ahmad Dahlan',
+            'groom_image' => 'grooms/groom.jpg',
+        ]);
+
+        Livewire::test(ChatRoom::class, ['page' => $page])
+            ->assertSeeHtml('brides/bride.jpg')
+            ->assertSeeHtml('grooms/groom.jpg')
+            ->assertSeeHtml('previewPhoto')
+            ->assertSee('Siti Nurhaliza')
+            ->assertSee('Ahmad Dahlan');
+    }
 }

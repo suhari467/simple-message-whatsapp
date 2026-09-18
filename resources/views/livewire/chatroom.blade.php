@@ -8,6 +8,8 @@
          waveformBars: [],
          activePhoto: null,
          galleryPhotos: [],
+         previewPhoto: null,
+         previewTitle: null,
          driverObj: null,
          tutorialRefreshInterval: null,
          initAudio() {
@@ -147,7 +149,7 @@
                     </div>
                 @endif
                 @if($page->title_prefix)
-                    <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                    <p class="text-xl text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
                 @endif
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ $page->name }}</h2>
                 @if($senderName)
@@ -230,7 +232,7 @@
                             </div>
                         @endif
                         @if($page->title_prefix)
-                            <p class="text-xl tracking-widest text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
+                            <p class="text-xl text-emerald-600 dark:text-emerald-400 font-bold mb-1">{{ $page->title_prefix }}</p>
                         @endif
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
                             {{ $page->name }}
@@ -326,7 +328,10 @@
                             <div class="flex flex-col items-center text-center">
                                 @if($page->bride_image)
                                     <img src="{{ Storage::url($page->bride_image) }}"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50" loading="lazy">
+                                        @click="previewPhoto = '{{ Storage::url($page->bride_image) }}'; previewTitle = '{{ addslashes($page->bride_name) }}'"
+                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200"
+                                        alt="{{ $page->bride_name }}"
+                                        loading="lazy">
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-pink-50 dark:border-pink-950">
@@ -357,7 +362,10 @@
                             <div class="flex flex-col items-center text-center">
                                 @if($page->groom_image)
                                     <img src="{{ Storage::url($page->groom_image) }}"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50" loading="lazy">
+                                        @click="previewPhoto = '{{ Storage::url($page->groom_image) }}'; previewTitle = '{{ addslashes($page->groom_name) }}'"
+                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200"
+                                        alt="{{ $page->groom_name }}"
+                                        loading="lazy">
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-blue-50 dark:border-blue-950">
@@ -450,17 +458,21 @@
                                         <div
                                             class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-emerald-500 border-4 border-white dark:border-[#222e35]">
                                         </div>
-                                        <span
-                                            class="inline-block px-2 py-0.5 text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-full mb-1">{{ $story->date_or_year }}</span>
-                                        <h5 class="font-bold text-sm text-gray-900 dark:text-white">{{ $story->title }}</h5>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 whitespace-pre-wrap">{{ $story->description }}</p>
-                                        @if($story->image_path)
-                                            <div
-                                                class="mt-2 w-32 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
-                                                <img src="{{ Storage::url($story->image_path) }}" alt="{{ $story->title }}"
-                                                    class="w-full h-auto object-cover" loading="lazy">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="flex-1 min-w-0">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-full mb-1">{{ $story->date_or_year }}</span>
+                                                <h5 class="font-bold text-sm text-gray-900 dark:text-white">{{ $story->title }}</h5>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 whitespace-pre-wrap">{{ $story->description }}</p>
                                             </div>
-                                        @endif
+                                            @if($story->image_path)
+                                                <div
+                                                    class="w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+                                                    <img src="{{ Storage::url($story->image_path) }}" alt="{{ $story->title }}"
+                                                        class="w-full h-full object-cover" loading="lazy">
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -663,6 +675,46 @@
                             </a>
                         </p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Single Photo Pop-out Modal (Lightbox) -->
+            <div x-show="previewPhoto !== null" style="display:none;"
+                class="fixed inset-0 bg-black/95 z-[999] flex flex-col justify-between p-4"
+                @keydown.escape.window="previewPhoto = null"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0">
+
+                <!-- Close Button & Header -->
+                <div class="flex justify-between items-center z-[1000] max-w-lg mx-auto w-full">
+                    <span class="text-white/90 font-semibold text-sm truncate pr-2" x-text="previewTitle || 'Foto Mempelai'"></span>
+                    <button @click="previewPhoto = null"
+                        class="text-white/80 hover:text-white p-2 focus:outline-none transition-colors"
+                        aria-label="Tutup Preview">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Big Image Container -->
+                <div class="flex-1 flex items-center justify-center p-2 relative select-none max-w-lg mx-auto w-full"
+                    @click.self="previewPhoto = null">
+                    <img :src="previewPhoto" :alt="previewTitle || 'Foto Mempelai'"
+                        class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl transition-all duration-300 transform"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-90"
+                        x-transition:enter-end="opacity-100 scale-100">
+                </div>
+
+                <!-- Bottom Hint -->
+                <div class="text-center text-white/50 text-xs py-2 select-none">
+                    Ketuk di luar gambar atau tombol silang untuk menutup
                 </div>
             </div>
 
