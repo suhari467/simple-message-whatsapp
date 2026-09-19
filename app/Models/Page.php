@@ -14,6 +14,7 @@ class Page extends Model
         'slug',
         'logo',
         'description',
+        'detailed_description',
         'content',
         'wedding_date',
         'bride_name',

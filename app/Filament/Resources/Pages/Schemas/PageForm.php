@@ -33,7 +33,7 @@ class PageForm
                 Section::make('Media & Cerita Perjalanan (Timeline)')
                     ->schema(static::getMediaTimelineSchema()),
 
-                Section::make('Hadiah Digital / Donasi')
+                Section::make('Hadiah Digital / Kado')
                     ->schema(static::getDonationsSchema()),
             ]);
     }
@@ -55,7 +55,7 @@ class PageForm
                 ->description('Galeri prewedding dan timeline love story')
                 ->schema(static::getMediaTimelineSchema()),
 
-            Step::make('Hadiah Digital / Donasi')
+            Step::make('Hadiah Digital / Kado')
                 ->description('Nomor rekening atau alamat pengiriman kado')
                 ->schema(static::getDonationsSchema()),
         ];
@@ -81,9 +81,17 @@ class PageForm
                 ->label('Foto Profil Grup / Logo')
                 ->image()
                 ->disk('public')
-                ->directory('logos'),
+                ->directory('logos')
+                ->automaticallyResizeImagesMode('contain')
+                ->automaticallyResizeImagesToWidth('1200')
+                ->automaticallyResizeImagesToHeight('1200')
+                ->automaticallyUpscaleImagesWhenResizing(false)
+                ->maxSize(5120),
             Textarea::make('description')
                 ->label('Deskripsi Singkat Undangan')
+                ->columnSpanFull(),
+            Textarea::make('detailed_description')
+                ->label('Deskripsi Lengkap Acara')
                 ->columnSpanFull(),
             MarkdownEditor::make('content')
                 ->label('Konten Papan Informasi / Pesan Penyambut (Markdown)')
@@ -111,7 +119,12 @@ class PageForm
                 ->label('Foto Pengantin Wanita')
                 ->image()
                 ->disk('public')
-                ->directory('brides'),
+                ->directory('brides')
+                ->automaticallyResizeImagesMode('contain')
+                ->automaticallyResizeImagesToWidth('1200')
+                ->automaticallyResizeImagesToHeight('1200')
+                ->automaticallyUpscaleImagesWhenResizing(false)
+                ->maxSize(5120),
             TextInput::make('groom_name')
                 ->label('Nama Pengantin Pria')
                 ->required(),
@@ -122,7 +135,12 @@ class PageForm
                 ->label('Foto Pengantin Pria')
                 ->image()
                 ->disk('public')
-                ->directory('grooms'),
+                ->directory('grooms')
+                ->automaticallyResizeImagesMode('contain')
+                ->automaticallyResizeImagesToWidth('1200')
+                ->automaticallyResizeImagesToHeight('1200')
+                ->automaticallyUpscaleImagesWhenResizing(false)
+                ->maxSize(5120),
             DatePicker::make('wedding_date')
                 ->label('Tanggal Pernikahan')
                 ->required(),
@@ -159,6 +177,11 @@ class PageForm
                         ->image()
                         ->disk('public')
                         ->directory('prewedding')
+                        ->automaticallyResizeImagesMode('contain')
+                        ->automaticallyResizeImagesToWidth('1200')
+                        ->automaticallyResizeImagesToHeight('1200')
+                        ->automaticallyUpscaleImagesWhenResizing(false)
+                        ->maxSize(5120)
                         ->required(),
                 ])
                 ->grid(3)
@@ -183,7 +206,12 @@ class PageForm
                         ->label('Foto Momen (Opsional)')
                         ->image()
                         ->disk('public')
-                        ->directory('stories'),
+                        ->directory('stories')
+                        ->automaticallyResizeImagesMode('contain')
+                        ->automaticallyResizeImagesToWidth('1200')
+                        ->automaticallyResizeImagesToHeight('1200')
+                        ->automaticallyUpscaleImagesWhenResizing(false)
+                        ->maxSize(5120),
                     TextInput::make('sort_order')
                         ->label('Urutan Tampil')
                         ->numeric()
@@ -199,7 +227,7 @@ class PageForm
         return [
             Repeater::make('donations')
                 ->relationship('donations')
-                ->label('Daftar Rekening / Kado Donasi')
+                ->label('Daftar Rekening / Kado Hadiah')
                 ->schema([
                     Select::make('gift_type')
                         ->label('Tipe Hadiah')
