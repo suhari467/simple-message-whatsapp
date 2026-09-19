@@ -25,7 +25,7 @@ class PageResourceTest extends TestCase
         $this->assertEquals('Informasi Dasar Grup', $steps[0]->getLabel());
         $this->assertEquals('Detail Mempelai & Acara', $steps[1]->getLabel());
         $this->assertEquals('Media & Cerita Perjalanan (Timeline)', $steps[2]->getLabel());
-        $this->assertEquals('Hadiah Digital / Donasi', $steps[3]->getLabel());
+        $this->assertEquals('Hadiah Digital / Kado', $steps[3]->getLabel());
     }
 
     public function test_user_can_access_create_page_wizard(): void

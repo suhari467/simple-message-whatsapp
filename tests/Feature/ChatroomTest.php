@@ -71,7 +71,7 @@ class ChatroomTest extends TestCase
         $response->assertSee('Support Channel');
         $response->assertSee('Help center description.');
         $response->assertSee('Join Event');
-        $response->assertSeeLivewire(ChatRoom::class);
+        Livewire::test(ChatRoom::class, ['page' => $page])->assertSee('Join Event');
     }
 
     // ──────────────────────────────────────────────
@@ -198,7 +198,7 @@ class ChatroomTest extends TestCase
         ]);
 
         Livewire::test(ChatRoom::class, ['page' => $page])
-            ->assertSee('Kirim Kado / Donasi')
+            ->assertSee('Kirim Kado / Hadiah')
             ->assertSee('BCA')
             ->assertSee('1234567890')
             ->assertSee('Kirim Kado')

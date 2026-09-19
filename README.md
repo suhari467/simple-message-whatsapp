@@ -24,7 +24,7 @@ Aplikasi undangan pernikahan digital berbasis web interaktif dengan desain tema 
   - **Detail Mempelai & Acara**: Informasi lengkap kedua mempelai (orang tua, foto), jadwal akad nikah, resepsi, serta integrasi tautan Google Maps.
   - **Perjalanan Cinta (Love Story Timeline)**: Rangkaian cerita perjalanan cinta dengan tampilan visual 2 kolom (teks cerita di kiri, foto momen di kanan) yang responsif dan konsisten baik di desktop maupun mobile.
   - **Galeri Foto Prewedding**: Grid galeri media foto dengan preview lightbox interaktif.
-  - **Hadiah Digital / Donasi**: Pilihan transfer bank/e-wallet (dengan fitur salin nomor rekening instan) dan alamat pengiriman kado fisik.
+  - **Hadiah Digital / Kado**: Pilihan transfer bank/e-wallet (dengan fitur salin nomor rekening instan) dan alamat pengiriman kado fisik.
 - **Buku Tamu & RSVP Interaktif**: Tamu dapat mengirim ucapan selamat, doa restu, serta konfirmasi kehadiran secara langsung dari antarmuka obrolan.
 - **Musik Latar (Background Music)**: Pemutar lagu MP3 latar belakang dengan kontrol putar/jeda mengambang (*floating button*).
 
