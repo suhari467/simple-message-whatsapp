@@ -140,9 +140,20 @@
             <div
                 class="bg-white dark:bg-[#222e35] rounded-xl shadow-2xl p-8 max-w-sm w-full text-center m-4 transition-colors duration-300">
                 @if($page->logo)
-                    <img src="{{ glide_image($page->logo, ['w' => 200, 'h' => 200, 'fit' => 'crop']) }}" alt="Logo"
-                        class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-emerald-100 dark:border-emerald-900 object-cover shadow-sm"
-                        loading="lazy" decoding="async">
+                    <div x-data="{ loaded: false }" class="relative w-24 h-24 rounded-full mx-auto mb-4 border-4 border-emerald-100 dark:border-emerald-900 shadow-sm overflow-hidden bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                        <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                            <svg class="animate-spin h-6 w-6 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <img src="{{ glide_image($page->logo, ['w' => 200, 'h' => 200, 'fit' => 'crop']) }}" alt="Logo"
+                            @load="loaded = true"
+                            x-init="if ($el.complete) loaded = true"
+                            class="w-full h-full object-cover transition-opacity duration-300"
+                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                            loading="lazy" decoding="async">
+                    </div>
                 @else
                     <div
                         class="w-24 h-24 rounded-full bg-[#075e54] dark:bg-[#202c33] text-white flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
@@ -186,7 +197,20 @@
                 wire:click="togglePageInfo"
                 @click="if (driverObj) { driverObj.destroy(); }">
                 @if($page->logo)
-                    <img src="{{ glide_image($page->logo, ['w' => 100, 'h' => 100, 'fit' => 'crop']) }}" class="w-10 h-10 rounded-full mr-3 object-cover shadow-sm" loading="lazy" decoding="async">
+                    <div x-data="{ loaded: false }" class="relative w-10 h-10 rounded-full mr-3 overflow-hidden bg-[#054c44] dark:bg-[#111b21] flex-shrink-0 flex items-center justify-center shadow-sm">
+                        <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                            <svg class="animate-spin h-4 w-4 text-emerald-300 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <img src="{{ glide_image($page->logo, ['w' => 100, 'h' => 100, 'fit' => 'crop']) }}" alt="Logo"
+                            @load="loaded = true"
+                            x-init="if ($el.complete) loaded = true"
+                            class="w-full h-full object-cover transition-opacity duration-300"
+                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                            loading="lazy" decoding="async">
+                    </div>
                 @else
                     <div
                         class="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center font-bold mr-3 shadow-sm text-gray-600 dark:text-gray-300">
@@ -224,8 +248,20 @@
                     <!-- Profile Card -->
                     <div class="bg-white dark:bg-[#222e35] p-6 flex flex-col items-center text-center shadow-sm">
                         @if($page->logo)
-                            <img src="{{ glide_image($page->logo, ['w' => 300, 'h' => 300, 'fit' => 'crop']) }}" alt="Logo"
-                                class="w-32 h-32 rounded-full object-cover shadow-md mb-4 border-4 border-emerald-100 dark:border-emerald-900" loading="lazy" decoding="async">
+                            <div x-data="{ loaded: false }" class="relative w-32 h-32 rounded-full overflow-hidden shadow-md mb-4 border-4 border-emerald-100 dark:border-emerald-900 bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                                <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                                    <svg class="animate-spin h-8 w-8 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <img src="{{ glide_image($page->logo, ['w' => 300, 'h' => 300, 'fit' => 'crop']) }}" alt="Logo"
+                                    @load="loaded = true"
+                                    x-init="if ($el.complete) loaded = true"
+                                    class="w-full h-full object-cover transition-opacity duration-300"
+                                    :class="loaded ? 'opacity-100' : 'opacity-0'"
+                                    loading="lazy" decoding="async">
+                            </div>
                         @else
                             <div
                                 class="w-32 h-32 rounded-full bg-[#075e54] dark:bg-[#202c33] text-white flex items-center justify-center text-5xl font-bold shadow-md mb-4">
@@ -329,11 +365,23 @@
                             <!-- Mempelai Wanita -->
                             <div class="flex flex-col items-center text-center">
                                 @if($page->bride_image)
-                                    <img src="{{ glide_image($page->bride_image, ['w' => 250, 'h' => 250, 'fit' => 'crop']) }}"
+                                    <div x-data="{ loaded: false }"
                                         @click="previewPhoto = '{{ Storage::url($page->bride_image) }}'; previewTitle = '{{ addslashes($page->bride_name) }}'"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200"
-                                        alt="{{ $page->bride_name }}"
-                                        loading="lazy" decoding="async">
+                                        class="relative w-24 h-24 rounded-full overflow-hidden shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200 bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                                        <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                                            <svg class="animate-spin h-6 w-6 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </div>
+                                        <img src="{{ glide_image($page->bride_image, ['w' => 250, 'h' => 250, 'fit' => 'crop']) }}"
+                                            @load="loaded = true"
+                                            x-init="if ($el.complete) loaded = true"
+                                            class="w-full h-full object-cover transition-opacity duration-300"
+                                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                                            alt="{{ $page->bride_name }}"
+                                            loading="lazy" decoding="async">
+                                    </div>
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-pink-50 dark:border-pink-950">
@@ -363,11 +411,23 @@
                             <!-- Mempelai Pria -->
                             <div class="flex flex-col items-center text-center">
                                 @if($page->groom_image)
-                                    <img src="{{ glide_image($page->groom_image, ['w' => 250, 'h' => 250, 'fit' => 'crop']) }}"
+                                    <div x-data="{ loaded: false }"
                                         @click="previewPhoto = '{{ Storage::url($page->groom_image) }}'; previewTitle = '{{ addslashes($page->groom_name) }}'"
-                                        class="w-24 h-24 rounded-full object-cover shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200"
-                                        alt="{{ $page->groom_name }}"
-                                        loading="lazy" decoding="async">
+                                        class="relative w-24 h-24 rounded-full overflow-hidden shadow-md mb-3 border-4 border-emerald-50 dark:border-emerald-900/50 cursor-pointer hover:scale-105 transition-transform duration-200 bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                                        <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                                            <svg class="animate-spin h-6 w-6 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </div>
+                                        <img src="{{ glide_image($page->groom_image, ['w' => 250, 'h' => 250, 'fit' => 'crop']) }}"
+                                            @load="loaded = true"
+                                            x-init="if ($el.complete) loaded = true"
+                                            class="w-full h-full object-cover transition-opacity duration-300"
+                                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                                            alt="{{ $page->groom_name }}"
+                                            loading="lazy" decoding="async">
+                                    </div>
                                 @else
                                     <div
                                         class="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl font-bold shadow-md mb-3 border-4 border-blue-50 dark:border-blue-950">
@@ -468,10 +528,20 @@
                                                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 whitespace-pre-wrap">{{ $story->description }}</p>
                                             </div>
                                             @if($story->image_path)
-                                                <div
-                                                    class="w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+                                                <div x-data="{ loaded: false }"
+                                                    class="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                                                    <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                                                        <svg class="animate-spin h-6 w-6 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                        </svg>
+                                                    </div>
                                                     <img src="{{ glide_image($story->image_path, ['w' => 300, 'h' => 300, 'fit' => 'crop']) }}" alt="{{ $story->title }}"
-                                                        class="w-full h-full object-cover" loading="lazy" decoding="async">
+                                                        @load="loaded = true"
+                                                        x-init="if ($el.complete) loaded = true"
+                                                        class="w-full h-full object-cover transition-opacity duration-300"
+                                                        :class="loaded ? 'opacity-100' : 'opacity-0'"
+                                                        loading="lazy" decoding="async">
                                                 </div>
                                             @endif
                                         </div>
@@ -494,12 +564,21 @@
                             </div>
                             <div class="flex space-x-2 overflow-x-auto pb-2 custom-scrollbar">
                                 @foreach($page->galleries as $index => $gallery)
-                                    <div
-                                        class="flex-none w-24 h-24 rounded-lg overflow-hidden border border-gray-100
-                                                                                                dark:border-gray-850 shadow-sm">
+                                    <div x-data="{ loaded: false }"
+                                        class="relative flex-none w-24 h-24 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-850 shadow-sm bg-gray-100 dark:bg-[#1f2c34] flex items-center justify-center">
+                                        <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10">
+                                            <svg class="animate-spin h-6 w-6 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </div>
                                         <img src="{{ glide_image($gallery->image_path, ['w' => 250, 'h' => 250, 'fit' => 'crop']) }}" alt="Prewedding"
                                             @click="activePhoto = {{ $index }}"
-                                            class="w-full h-full object-cover hover:scale-105 transition duration-200 cursor-pointer" loading="lazy" decoding="async">
+                                            @load="loaded = true"
+                                            x-init="if ($el.complete) loaded = true"
+                                            class="w-full h-full object-cover hover:scale-105 transition-all duration-300 cursor-pointer"
+                                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                                            loading="lazy" decoding="async">
                                     </div>
                                 @endforeach
                             </div>
@@ -538,11 +617,20 @@
                                 <!-- Big Image Container -->
                                 <div class="flex-1 h-[70vh] flex items-center justify-center relative select-none">
                                     <template x-for="(imgSrc, index) in galleryPhotos" :key="index">
-                                        <img x-show="activePhoto === index" :src="imgSrc"
-                                            class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300 transform"
-                                            x-transition:enter="transition ease-out duration-200"
-                                            x-transition:enter-start="opacity-0 scale-95"
-                                            x-transition:enter-end="opacity-100 scale-100">
+                                        <div x-data="{ loaded: false }" x-show="activePhoto === index"
+                                            class="w-full h-full flex items-center justify-center relative">
+                                            <div x-show="!loaded" class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                                                <svg class="animate-spin h-8 w-8 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                            </div>
+                                            <img :src="imgSrc"
+                                                @load="loaded = true"
+                                                x-init="if ($el.complete) loaded = true"
+                                                class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300 transform"
+                                                :class="loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'">
+                                        </div>
                                     </template>
                                 </div>
 
@@ -681,7 +769,9 @@
             </div>
 
             <!-- Single Photo Pop-out Modal (Lightbox) -->
-            <div x-show="previewPhoto !== null" style="display:none;"
+            <div x-data="{ photoLoaded: false }"
+                x-init="$watch('previewPhoto', val => { if (val) photoLoaded = false; })"
+                x-show="previewPhoto !== null" style="display:none;"
                 class="fixed inset-0 bg-black/95 z-[999] flex flex-col justify-between p-4"
                 @keydown.escape.window="previewPhoto = null"
                 x-transition:enter="transition ease-out duration-200"
@@ -707,11 +797,17 @@
                 <!-- Big Image Container -->
                 <div class="flex-1 flex items-center justify-center p-2 relative select-none max-w-lg mx-auto w-full"
                     @click.self="previewPhoto = null">
+                    <div x-show="!photoLoaded" class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                        <svg class="animate-spin h-8 w-8 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
                     <img :src="previewPhoto" :alt="previewTitle || 'Foto Mempelai'"
+                        @load="photoLoaded = true"
+                        x-init="if ($el.complete) photoLoaded = true"
                         class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl transition-all duration-300 transform"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 scale-90"
-                        x-transition:enter-end="opacity-100 scale-100">
+                        :class="photoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'">
                 </div>
 
                 <!-- Bottom Hint -->

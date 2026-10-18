@@ -6,7 +6,6 @@ use App\Filament\Resources\Pages\PageResource;
 use App\Imports\RecipientImport;
 use App\Models\Recipient;
 use BackedEnum;
-use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -129,45 +128,28 @@ class ManagePageRecipients extends ManageRelatedRecords
                     ->action(function (Recipient $record) {
                         $page = $record->page;
 
-                        $weddingDate = $page->wedding_date;
-                        $akadTime = $page->akad_time;
-                        $hariTanggal = '';
-                        $jam = '';
-                        try {
-                            $hariTanggal = Carbon::parse($weddingDate)->locale('id')->translatedFormat('l, d F Y');
-                            $jam = Carbon::parse($akadTime)->format('H:i');
-                        } catch (\Exception $e) {
-                            $hariTanggal = $weddingDate;
-                            $jam = $akadTime;
-                        }
-
                         $slugLink = url('/'.$page->slug);
 
-                        $template = "The Wedding Of {$page->name}
-
-Kepada Yth. 
+                        $template = "Kepada Yth.
 Bapak/Ibu/Saudara/i
-{$record->name}
+*{$record->name}*
+_______
 
---
-Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara pernikahan kami:
+*Assalamualaikum Warahmatullahi Wabarakatuh*
 
-{$page->bride_name}
-Putri dari {$page->bride_parents}
-&
-{$page->groom_name}
-Putra dari {$page->groom_parents}
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara pernikahan kami.
 
-\u{1F4C5} {$hariTanggal}
-\u{1F550} {$jam} WIB 
-\u{1F4CD} {$page->akad_location}
+*Berikut link undangan kami*, untuk info lengkap dari acara, bisa kunjungi :
 
-Silahkan melakukan konfirmasi kehadiran dengan mengisi RSVP yang ada pada link dibawah ini:
 {$slugLink}?to=".rawurlencode($record->name)."
 
-Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu berkenan untuk hadir dan memberikan doa restu.
+Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
-Hormat Kami, yang berbahagia.
+*Wassalamualaikum Warahmatullahi Wabarakatuh*
+
+Terima Kasih
+
+Hormat kami,
 {$page->name}";
 
                         $jsonTemplate = json_encode($template);
